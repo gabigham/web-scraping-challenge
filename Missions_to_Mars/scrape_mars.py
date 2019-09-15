@@ -10,15 +10,13 @@ import re
 # executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
 # browser = Browser('chrome', **executable_path, headless=False)
 
-def init_browser():
-    # @NOTE: Replace the path with your actual path to the chromedriver
-    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
-    return Browser("chrome", **executable_path, headless=False)
-
-
 def scrape():
     # scrapes several sites and returns mars_data
     mars_data = {}
+
+    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+    browser = Browser("chrome", **executable_path, headless=True)
+
 
     # scrapes article titles and news from mars.nasa.gov
     url = 'https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest'
@@ -27,25 +25,15 @@ def scrape():
     titles = []
     news = []
 
-    for i in range(5):
-         # Click the 'More' button five times (for fun)
-        try:
-            browser.click_link_by_text('More')
-        except:
-            print("Scraping Complete")
-        
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')   
-    articles = soup.find_all('li', class_='slide')
-    
-    for article in articles:     
-        news_title = article.find('div', class_="content_title").text.strip()
-        news_p = article.find('div', class_="article_teaser_body").text.strip()
-        titles.append(news_title)
-        news.append(news_p)
+    article = soup.find('li', class_='slide')
+        
+    news_title = article.find('div', class_="content_title").text.strip()
+    news_p = article.find('div', class_="article_teaser_body").text.strip()
        
-    news = {"news_titles":titles, "news_p":news}
-    mars_data["articles"] = news
+    latest_news = {"news_title":news_title, "news_p":news_p}
+    mars_data["article"] = latest_news
 
     # scrape featured space image url from jpl.nasa.gov
     featured_image_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'

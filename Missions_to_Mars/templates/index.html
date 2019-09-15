@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mission to Mars</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 
@@ -16,12 +17,23 @@
       <h1>Mission to Mars</h1>
       <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
     </div>
-    <img src="{{ mission.articles.news_titles[0] }}" alt="Sloth">
-    <h2>The current weather on Mars is:</h2>
-    <h3>{{ mission.weather }}</h3>
     
+    <h2>Latest Mars News </h2>
+    <h4>{{ mission.article.news_title }}</h4>
+    <h5>{{ mission.article.news_p }} </h5> 
   </div>
+  
+  <div class="row">
+    <div class="col-md-8">
+      <div class="jumbotron text-center">
+        <img src="{{ mission.featured_image }}" alt="featured image">
+      </div>
+    </div>  
   </div>
+
+   
+
+
 </body>
 
 </html>
