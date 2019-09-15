@@ -7,10 +7,19 @@ import pandas as pd
 from splinter.exceptions import ElementDoesNotExist
 import re
 
-executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
-browser = Browser('chrome', **executable_path, headless=False)
+# executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
+# browser = Browser('chrome', **executable_path, headless=False)
 
-def news():
+def init_browser():
+    # @NOTE: Replace the path with your actual path to the chromedriver
+    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+    return Browser("chrome", **executable_path, headless=False)
+
+
+def scrape():
+    # scrapes several sites and returns mars_data
+    mars_data = {}
+
     # scrapes article titles and news from mars.nasa.gov
     url = 'https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest'
     browser.visit(url)
@@ -19,7 +28,7 @@ def news():
     news = []
 
     for i in range(5):
-         # Click the 'More' button five times
+         # Click the 'More' button five times (for fun)
         try:
             browser.click_link_by_text('More')
         except:
@@ -29,20 +38,16 @@ def news():
     soup = BeautifulSoup(html, 'html.parser')   
     articles = soup.find_all('li', class_='slide')
     
-    # Iterate through each book
     for article in articles:     
         news_title = article.find('div', class_="content_title").text.strip()
         news_p = article.find('div', class_="article_teaser_body").text.strip()
         titles.append(news_title)
         news.append(news_p)
        
-    db = {"news_titles":titles, "news_p":news}
+    news = {"news_titles":titles, "news_p":news}
+    mars_data["articles"] = news
 
-    return db
-
-
-def featured_image():
-    # scrapes featured space image url from jpl.nasa.gov
+    # scrape featured space image url from jpl.nasa.gov
     featured_image_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(featured_image_url)
     html = browser.html
@@ -51,11 +56,9 @@ def featured_image():
     image_url = image_url.partition("'")[2].partition("'")[0]
     featured_image_url = 'https://www.jpl.nasa.gov' + image_url
 
-    return featured_image_url
+    mars_data["featured_image"] = featured_image_url
 
-
-def weather():
-    # scrapes latest weather info from nasa mars twitter
+    # scrape latest weather info from nasa mars twitter
     twitter_url = 'https://twitter.com/marswxreport?lang=en'
     browser.visit(twitter_url)
     html = browser.html
@@ -66,11 +69,9 @@ def weather():
         if tweet.text[0:7] == "InSight":
             latest_weather = tweet.text
 
-    return latest_weather
+    mars_data["weather"] = latest_weather
 
-
-def hemisphere_images():
-    # scrapes high quality hemisphere image urls from USGS
+    # scrape high quality hemisphere image urls from USGS
     hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles Marineris']
     hemisphere_image_urls = []
 
@@ -84,4 +85,6 @@ def hemisphere_images():
         hemisphere_image_urls.append({"title" : hemispheres[i], \
                                       "img_url" : hem_url.find('a')['href']})
     
-    return hemisphere_image_urls
+    mars_data["hemisphere_images"] = hemisphere_image_urls
+
+    return mars_data
