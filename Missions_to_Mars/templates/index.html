@@ -25,13 +25,54 @@
   
   <div class="row">
     <div class="col-md-8">
-      <div class="jumbotron text-center">
-        <img src="{{ mission.featured_image }}" alt="featured image">
-      </div>
-    </div>  
+      <div class="jumbotron text-center" >
+        <h3>Featured Mars Image</h3>
+         <img src="{{ mission.featured_image }}" alt="featured image" height=100% width=100% >
+      </div>      
+    </div>
+    
+    <div class="col-md-4">
+        <div class="well">
+            <h3>Latest Mars Weather</h3>
+            {{ mission.weather }}
+        </div>
+        <div class="well">
+            <img src="https://www.slashgear.com/wp-content/uploads/2018/11/Temperature-Mars-Facts.jpg" alt="fact image" height=100% width=100% >
+        </div>
+    </div>
   </div>
 
-   
+  <div class="row">
+    <div class="col-md-6">
+      <div class="well">
+        <img src={{ mission.hemisphere_images[0].img_url }} alt="Cerebus" height=100% width=100%>
+        <h4> {{ mission.hemisphere_images[0].title }} Enhanced </h4>
+      </div>
+    </div>
+    <div class="col-md-6">
+       <div class="well">
+          <img src={{ mission.hemisphere_images[1].img_url }} alt="Schiaparelli" height=100% width=100%>
+          <h4> {{ mission.hemisphere_images[1].title }} Enhanced </h4>
+        </div>
+    </div>
+  </div>  
+  
+
+    <div class="row">
+      <div class="col-md-6">
+          <div class="well">
+            <img src={{ mission.hemisphere_images[0].img_url }} alt="Syrtis Major" height=100% width=100%>
+            <h4> {{ mission.hemisphere_images[2].title }} Enhanced </h4>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="well">
+            <img src={{ mission.hemisphere_images[1].img_url }} alt="Valles Marineris" height=100% width=100%>
+            <h4> {{ mission.hemisphere_images[3].title }} Enhanced </h4>
+          </div>
+      </div>
+    </div>
+    
 
 
 </body>
